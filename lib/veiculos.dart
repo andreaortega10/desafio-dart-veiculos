@@ -1,6 +1,6 @@
 import 'package:supabase/supabase.dart';
 
-// CADASTRAR veículo
+// cadastrar
 cadastrarVeiculo(
   SupabaseClient cliente,
   String marca,
@@ -28,20 +28,20 @@ cadastrarVeiculo(
   return veiculo;
 }
 
-// LISTAR veículos
+// listar
 listarVeiculos(SupabaseClient cliente) async {
   final veiculos = await cliente
-      // definir a tabela que iremos consultar
-      .from("veiculos")
-      // consultar os dados
-      .select("id, marca, modelo, ano, valor, quilometragem")
-      // ordenação ID
-      .order("id");
+    // seleciona a tabela
+    .from("veiculos")
+    // consultar os dados
+    .select("id, marca, modelo, ano, valor, quilometragem")
+    // ordenação ID
+    .order("id");
 
   return veiculos;
 }
 
-// ATUALIZAR veículo
+// atualizar
 atualizarVeiculo(
   SupabaseClient cliente,
   int id,
@@ -52,7 +52,7 @@ atualizarVeiculo(
   int quilometragem,
 ) async {
   final veiculos = await cliente
-      // informar a tabela
+      // seleciona a tabela
       .from("veiculos")
       // método para atualizar
       .update({
@@ -78,7 +78,7 @@ atualizarVeiculo(
 // EXCLUIR veículo
 excluirVeiculo(SupabaseClient cliente, int id) async {
   final veiculos = await cliente
-      // informa a tabela
+      // selecionar a tabela
       .from("veiculos")
       // método para exclusão
       .delete()
@@ -88,6 +88,24 @@ excluirVeiculo(SupabaseClient cliente, int id) async {
       .select();
 
   // nenhum registro afetado
+  if (veiculos.isEmpty) {
+    return null;
+  }
+
+  return veiculos.first;
+}
+
+// buscar por id
+buscarVeiculo(SupabaseClient cliente, int id) async {
+  final veiculos = await cliente
+      // informa a tabela
+      .from("veiculos")
+      // consultar os dados
+      .select("id, marca, modelo, ano, valor, quilometragem")
+      // identificador
+      .eq("id", id);
+
+  // nenhum registro encontrado
   if (veiculos.isEmpty) {
     return null;
   }
